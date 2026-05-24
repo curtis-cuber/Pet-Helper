@@ -40,11 +40,23 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const { data, error } = await supabase
-      .from('posts')
-      .insert({ ...getDraftData(), is_found: false })
-      .select().single();
+    let result;
+    try {
+      const timeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Request timed out — check your Supabase URL and anon key in Vercel environment variables.')), 8000)
+      );
+      result = await Promise.race([
+        supabase.from('posts').insert({ ...getDraftData(), is_found: false }).select().single(),
+        timeout
+      ]);
+    } catch (err) {
+      showMessage('Error: ' + err.message, 'error');
+      btn.disabled = false;
+      btn.textContent = 'Post Alert';
+      return;
+    }
 
+    const { data, error } = result;
     if (error) {
       showMessage('Error: ' + error.message, 'error');
       btn.disabled = false;
