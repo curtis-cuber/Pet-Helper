@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Remove-Item \"c:\\\\Users\\\\Curti\\\\OneDrive\\\\AI Lab 1\\\\GitHub\\\\Pet Helper\\\\make-poster.html\")",
+      "PowerShell(Remove-Item \"c:\\\\Users\\\\Curti\\\\OneDrive\\\\AI Lab 1\\\\GitHub\\\\Pet Helper\\\\make-poster.html\" -Confirm:$false)"
+    ]
+  }
+}

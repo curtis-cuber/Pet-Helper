@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Poster Preview – Pet Helper</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="index.html" class="nav-logo">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="6" cy="7" rx="2" ry="3"/>
+          <ellipse cx="18" cy="7" rx="2" ry="3"/>
+          <ellipse cx="3" cy="14" rx="2" ry="2.5"/>
+          <ellipse cx="21" cy="14" rx="2" ry="2.5"/>
+          <path d="M12 10c-4 0-7 2.5-7 6 0 2.5 2 4 4 4 .8 0 2-.3 3-.3s2.2.3 3 .3c2 0 4-1.5 4-4 0-3.5-3-6-7-6z"/>
+        </svg>
+        Pet Helper
+      </a>
+      <div class="nav-links">
+        <a href="browse.html"><span>Browse Lost Pets</span></a>
+        <button class="nav-icon-btn" onclick="toggleDarkMode()" title="Toggle dark mode"><span id="dark-mode-icon">☾</span></button>
+        <a href="login.html" id="nav-login" class="btn-nav"><span>Login</span></a>
+        <a href="#" id="nav-logout" class="btn-nav" style="display:none;"><span>Logout</span></a>
+      </div>
+    </nav>
+
+    <main>
+      <div style="max-width:600px;margin:0 auto;">
+        <a href="index.html" style="color:var(--text-muted);text-decoration:none;font-size:0.9rem;">&larr; Back to home</a>
+        <h1 class="section-title" style="margin-top:16px;">Poster Preview</h1>
+        <p class="section-sub">This is how your poster will look when posted.</p>
+
+        <div class="card" style="padding:28px;margin-top:20px;" id="poster-preview">
+          <div style="text-align:center;margin-bottom:20px;">
+            <div style="font-size:1.1rem;font-weight:700;color:var(--primary);letter-spacing:0.05em;">MISSING PET</div>
+          </div>
+          <img id="prev-photo" src="" alt="Pet photo"
+               style="width:100%;height:280px;object-fit:cover;border-radius:var(--radius);margin-bottom:20px;background:var(--border);"
+               onerror="this.src='https://placehold.co/600x280?text=No+Photo'" />
+          <h2 id="prev-name" style="font-size:1.8rem;font-weight:800;text-align:center;margin-bottom:16px;">Pet Name</h2>
+          <div class="detail-grid">
+            <div class="detail-item"><label>Animal</label><p id="prev-type">—</p></div>
+            <div class="detail-item"><label>Color</label><p id="prev-color">—</p></div>
+            <div class="detail-item"><label>Date Missing</label><p id="prev-date">—</p></div>
+            <div class="detail-item"><label>Last Seen</label><p id="prev-location">—</p></div>
+            <div class="detail-item"><label>Contact</label><p id="prev-contact">—</p></div>
+            <div class="detail-item" id="prev-reward-wrap" style="display:none;"><label>Reward</label><p id="prev-reward">—</p></div>
+          </div>
+          <div style="margin-top:16px;"><label style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);">Description</label><p id="prev-desc" style="margin-top:4px;">—</p></div>
+        </div>
+
+        <div style="margin-top:20px;display:flex;gap:12px;">
+          <a href="index.html" class="btn btn-outline">Cancel</a>
+          <button class="btn btn-primary" id="submit-from-preview">Post This Alert</button>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Pet Helper. Helping reunite pets with their families.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/darkmode.js"></script>
+    <script>
+      function formatDate(d) {
+        if (!d) return '—';
+        return new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      }
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        const draft = JSON.parse(sessionStorage.getItem('poster-draft') || '{}');
+        if (!draft.pet_name) { window.location.href = 'index.html'; return; }
+
+        document.getElementById('prev-photo').src = draft.photo_link || '';
+        document.getElementById('prev-name').textContent = draft.pet_name || '—';
+        document.getElementById('prev-type').textContent = draft.animal_type || '—';
+        document.getElementById('prev-color').textContent = draft.color || '—';
+        document.getElementById('prev-date').textContent = formatDate(draft.date_missing);
+        document.getElementById('prev-location').textContent = draft.last_seen_location || '—';
+        document.getElementById('prev-contact').textContent = draft.contact_info || '—';
+        document.getElementById('prev-desc').textContent = draft.description || '—';
+        if (draft.reward) {
+          document.getElementById('prev-reward').textContent = draft.reward;
+          document.getElementById('prev-reward-wrap').style.display = 'block';
+        }
+
+        document.getElementById('submit-from-preview').addEventListener('click', async () => {
+          const user = await getCurrentUser();
+          if (!user) { window.location.href = 'login.html'; return; }
+          const btn = document.getElementById('submit-from-preview');
+          btn.disabled = true; btn.textContent = 'Posting...';
+          const { error } = await supabase.from('posts').insert({ ...draft, user_id: user.id, owner_email: user.email, is_found: false });
+          if (error) { btn.disabled = false; btn.textContent = 'Post This Alert'; alert('Something went wrong. Please try again.'); }
+          else { sessionStorage.removeItem('poster-draft'); window.location.href = 'index.html?posted=true'; }
+        });
+      });
+    </script>
+  </body>
+</html>

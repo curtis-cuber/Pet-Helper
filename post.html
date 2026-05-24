@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lost Pet – Pet Helper</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  </head>
+  <body>
+
+    <nav>
+      <a href="index.html" class="nav-logo">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="6" cy="7" rx="2" ry="3"/>
+          <ellipse cx="18" cy="7" rx="2" ry="3"/>
+          <ellipse cx="3" cy="14" rx="2" ry="2.5"/>
+          <ellipse cx="21" cy="14" rx="2" ry="2.5"/>
+          <path d="M12 10c-4 0-7 2.5-7 6 0 2.5 2 4 4 4 .8 0 2-.3 3-.3s2.2.3 3 .3c2 0 4-1.5 4-4 0-3.5-3-6-7-6z"/>
+        </svg>
+        Pet Helper
+      </a>
+      <div class="nav-links">
+        <a href="browse.html"><span>Browse Lost Pets</span></a>
+        <a href="login.html" id="nav-login" class="btn-nav"><span>Login</span></a>
+        <a href="#" id="nav-logout" class="btn-nav" style="display:none;"><span>Logout</span></a>
+      </div>
+    </nav>
+
+    <main>
+      <a href="browse.html" style="color:var(--text-muted);text-decoration:none;font-size:0.9rem;">&larr; Back to all posts</a>
+
+      <div id="post-content" style="margin-top:20px;">
+        <div class="loading">Loading...</div>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Pet Helper. Helping reunite pets with their families.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/darkmode.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/post.js"></script>
+  </body>
+</html>

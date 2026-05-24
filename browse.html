@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Browse Lost Pets – Pet Helper</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  </head>
+  <body>
+
+    <nav>
+      <a href="index.html" class="nav-logo">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="6" cy="7" rx="2" ry="3"/>
+          <ellipse cx="18" cy="7" rx="2" ry="3"/>
+          <ellipse cx="3" cy="14" rx="2" ry="2.5"/>
+          <ellipse cx="21" cy="14" rx="2" ry="2.5"/>
+          <path d="M12 10c-4 0-7 2.5-7 6 0 2.5 2 4 4 4 .8 0 2-.3 3-.3s2.2.3 3 .3c2 0 4-1.5 4-4 0-3.5-3-6-7-6z"/>
+        </svg>
+        Pet Helper
+      </a>
+      <div class="nav-links">
+        <a href="browse.html"><span>Browse Lost Pets</span></a>
+        <button class="nav-icon-btn" id="notif-btn" title="Notifications">&#128276;<span class="bell-badge" id="bell-badge"></span></button>
+        <button class="nav-icon-btn" onclick="toggleDarkMode()" title="Toggle dark mode"><span id="dark-mode-icon">☾</span></button>
+        <a href="login.html" id="nav-login" class="btn-nav"><span>Login</span></a>
+        <a href="#" id="nav-logout" class="btn-nav" style="display:none;"><span>Logout</span></a>
+      </div>
+    </nav>
+
+    <main>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+        <div>
+          <h1 class="section-title" style="margin-bottom:4px;">Browse Lost Pets</h1>
+          <p class="section-sub" style="margin-bottom:0;">Click any pet to see full details and leave a tip.</p>
+        </div>
+        <div class="view-toggle">
+          <button class="toggle-btn active" id="btn-list" onclick="setView('list')">&#9783; List</button>
+          <button class="toggle-btn" id="btn-map" onclick="setView('map')">&#128205; Map</button>
+        </div>
+      </div>
+
+      <div class="search-bar" id="search-controls">
+        <input type="text" id="search-input" placeholder="Search by pet name..." />
+        <select id="type-filter">
+          <option value="">All Animals</option>
+          <option value="Dog">Dog</option>
+          <option value="Cat">Cat</option>
+          <option value="Bird">Bird</option>
+          <option value="Rabbit">Rabbit</option>
+          <option value="Other">Other</option>
+        </select>
+        <select id="time-filter">
+          <option value="">Any time</option>
+          <option value="1">Last 24 hours</option>
+          <option value="7">Last 7 days</option>
+          <option value="30">Last 30 days</option>
+        </select>
+        <input type="text" id="location-filter" placeholder="City or neighborhood..." />
+      </div>
+
+      <div id="list-view">
+        <div id="posts-grid" class="pet-grid">
+          <div class="loading">Loading posts...</div>
+        </div>
+      </div>
+
+      <div id="map-view" style="display:none;">
+        <button class="btn btn-outline" id="near-me-btn" style="margin-bottom:12px;">&#128205; Near Me</button>
+        <div id="browse-map" style="height:520px;border-radius:var(--radius);border:1px solid var(--border);"></div>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Pet Helper. Helping reunite pets with their families.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/darkmode.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/location.js"></script>
+    <script src="js/browse.js"></script>
+  </body>
+</html>
