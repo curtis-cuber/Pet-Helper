@@ -35,7 +35,7 @@
         <button class="nav-icon-btn" onclick="toggleDarkMode()" title="Toggle dark mode">
           <span id="dark-mode-icon">☾</span>
         </button>
-        <a href="login.html" id="nav-login" class="btn-nav"><span>Login</span></a>
+        <button class="btn-nav" id="nav-login" onclick="openAuthModal('login')"><span>Login</span></button>
         <a href="#" id="nav-logout" class="btn-nav" style="display:none;"><span>Logout</span></a>
       </div>
     </nav>
@@ -153,6 +153,44 @@
       </div>
     </div>
 
+    <!-- Login / Sign Up modal -->
+    <div id="auth-modal" class="modal-overlay" style="display:none;" onclick="if(event.target===this)closeAuthModal()">
+      <div class="modal-box">
+        <div class="auth-tabs" style="margin-bottom:20px;">
+          <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Log In</button>
+          <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
+        </div>
+        <div id="auth-modal-message"></div>
+
+        <form id="modal-login-form">
+          <div class="form-group">
+            <label for="modal-login-email">Email</label>
+            <input type="email" id="modal-login-email" required placeholder="you@email.com" />
+          </div>
+          <div class="form-group">
+            <label for="modal-login-password">Password</label>
+            <input type="password" id="modal-login-password" required placeholder="Your password" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;margin-top:4px;">Log In</button>
+          <p style="text-align:center;margin-top:12px;font-size:0.85rem;">
+            <a href="#" onclick="sendPasswordReset()" style="color:var(--primary);">Forgot password?</a>
+          </p>
+        </form>
+
+        <form id="modal-signup-form" style="display:none;">
+          <div class="form-group">
+            <label for="modal-signup-email">Email</label>
+            <input type="email" id="modal-signup-email" required placeholder="you@email.com" />
+          </div>
+          <div class="form-group">
+            <label for="modal-signup-password">Password</label>
+            <input type="password" id="modal-signup-password" required placeholder="Min 6 characters" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;margin-top:4px;">Create Account</button>
+        </form>
+      </div>
+    </div>
+
     <!-- Success modal (shown after posting a lost pet alert) -->
     <div id="success-modal" class="modal-overlay" style="display:none;">
       <div class="modal-box">
@@ -173,6 +211,67 @@
     <script src="js/notifications.js"></script>
     <script src="js/location.js"></script>
     <script src="js/home.js"></script>
+    <script>
+      function openAuthModal(tab) {
+        switchAuthTab(tab || 'login');
+        document.getElementById('auth-modal').style.display = 'flex';
+      }
+      function closeAuthModal() {
+        document.getElementById('auth-modal').style.display = 'none';
+        document.getElementById('auth-modal-message').innerHTML = '';
+      }
+      function switchAuthTab(tab) {
+        document.getElementById('modal-login-form').style.display = tab === 'login' ? 'block' : 'none';
+        document.getElementById('modal-signup-form').style.display = tab === 'signup' ? 'block' : 'none';
+        document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+        document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+        document.getElementById('auth-modal-message').innerHTML = '';
+      }
+      function showAuthMessage(text, type) {
+        document.getElementById('auth-modal-message').innerHTML =
+          `<div class="alert alert-${type}" style="margin-bottom:12px;">${text}</div>`;
+      }
+
+      document.getElementById('modal-login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true; btn.textContent = 'Logging in...';
+        const email = document.getElementById('modal-login-email').value;
+        const password = document.getElementById('modal-login-password').value;
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          showAuthMessage(error.message, 'error');
+          btn.disabled = false; btn.textContent = 'Log In';
+        } else {
+          closeAuthModal();
+          window.location.reload();
+        }
+      });
+
+      document.getElementById('modal-signup-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true; btn.textContent = 'Creating account...';
+        const email = document.getElementById('modal-signup-email').value;
+        const password = document.getElementById('modal-signup-password').value;
+        const { error } = await supabase.auth.signUp({ email, password });
+        if (error) {
+          showAuthMessage(error.message, 'error');
+          btn.disabled = false; btn.textContent = 'Create Account';
+        } else {
+          showAuthMessage('Account created! Check your email to confirm, then log in.', 'success');
+          btn.disabled = false; btn.textContent = 'Create Account';
+        }
+      });
+
+      async function sendPasswordReset() {
+        const email = document.getElementById('modal-login-email').value;
+        if (!email) { showAuthMessage('Enter your email above first.', 'error'); return; }
+        const { error } = await supabase.auth.resetPasswordForEmail(email);
+        if (error) showAuthMessage(error.message, 'error');
+        else showAuthMessage('Password reset email sent — check your inbox.', 'success');
+      }
+    </script>
     <script>
       function dismissWelcome() {
         document.getElementById('first-visit-modal').style.display = 'none';

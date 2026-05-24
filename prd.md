@@ -85,13 +85,15 @@ Paper flyers blow away and most neighbors never see them. This site gives lost p
 - **Edit** button goes back to the form.
 - **Post This Alert** button submits the poster.
 
-### 7. Login / Sign Up Page
-- Tab to switch between Log In and Sign Up.
-- **Log In** with email + password, or with **Google**.
-- **Sign Up** with email + password, or with **Google**.
+### 7. Login / Sign Up
+- Accessible from every page via the **Login** button in the nav — opens a modal overlay without leaving the current page.
+- Tab to switch between **Log In** and **Sign Up**.
+- **Log In** with email + password.
+- **Sign Up** with email + password.
 - If a user tries to sign up with an email that already has an account, a clear error message is shown.
 - **Forgot Password** link sends a reset email so the user can choose a new password.
 - After confirming email, users can log in.
+- Powered by **Supabase Auth** — requires a real Supabase project URL and anon key in `js/config.js`.
 - First-time sign-up leads to a **Welcome Screen** before the home page.
 
 ### 8. Welcome Screen (New Users Only)
