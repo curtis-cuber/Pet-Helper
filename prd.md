@@ -34,6 +34,7 @@ Paper flyers blow away and most neighbors never see them. This site gives lost p
 - Has a features section explaining what the site can do.
 - Shows a **Trending This Week** section — the posts with the most views in the past 7 days.
 - Shows a preview of the most recently reported pets with a "See All Posts" link.
+- All database calls have a **5-second timeout** — if Supabase is unreachable the page still loads and shows empty states instead of hanging.
 - Has a **?** button (fixed, bottom-right) that opens the How It Works page.
 - First-time visitors see a **Welcome Modal** explaining how the site works before they start browsing.
 - After a poster is submitted, a popup appears: *"Your alert is live! If your pet is found you will get notified by email."*

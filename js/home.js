@@ -11,15 +11,18 @@ function petCardHTML(post) {
     </a>`;
 }
 
+// Wraps any promise so it resolves with {data:null, error} after 5 seconds instead of hanging
+function withTimeout(promise, fallback = { data: null, error: true }) {
+  const timeout = new Promise(resolve => setTimeout(() => resolve(fallback), 5000));
+  return Promise.race([promise, timeout]);
+}
+
 async function loadRecentPosts() {
   const grid = document.getElementById('recent-grid');
-  const { data: posts, error } = await supabase
-    .from('posts')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(6);
-
-  if (error || !posts || posts.length === 0) {
+  const { data: posts } = await withTimeout(
+    supabase.from('posts').select('*').order('created_at', { ascending: false }).limit(6)
+  );
+  if (!posts || posts.length === 0) {
     grid.innerHTML = '<div class="empty-state"><strong>No posts yet.</strong><p>Be the first to report a lost pet.</p></div>';
     return;
   }
@@ -29,14 +32,10 @@ async function loadRecentPosts() {
 async function loadTrending() {
   const grid = document.getElementById('trending-grid');
   const weekAgo = new Date(Date.now() - 7 * 86400000).toISOString();
-  const { data: posts, error } = await supabase
-    .from('posts')
-    .select('*')
-    .gte('created_at', weekAgo)
-    .order('view_count', { ascending: false })
-    .limit(3);
-
-  if (error || !posts || posts.length === 0) {
+  const { data: posts } = await withTimeout(
+    supabase.from('posts').select('*').gte('created_at', weekAgo).order('view_count', { ascending: false }).limit(3)
+  );
+  if (!posts || posts.length === 0) {
     grid.innerHTML = '<div class="empty-state"><p>No trending posts this week yet.</p></div>';
     return;
   }
@@ -44,21 +43,25 @@ async function loadTrending() {
 }
 
 async function loadStats() {
-  const { count: total } = await supabase.from('posts').select('*', { count: 'exact', head: true });
-  const { count: found } = await supabase.from('posts').select('*', { count: 'exact', head: true }).eq('is_found', true);
+  const [{ count: total }, { count: found }] = await Promise.all([
+    withTimeout(supabase.from('posts').select('*', { count: 'exact', head: true }), { count: null }),
+    withTimeout(supabase.from('posts').select('*', { count: 'exact', head: true }).eq('is_found', true), { count: null }),
+  ]);
   document.getElementById('stat-total').textContent = total ?? '—';
   document.getElementById('stat-found').textContent = found ?? '—';
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
   loadRecentPosts();
   loadTrending();
   loadStats();
 
-  const loc = await getIPLocation();
-  if (loc && loc.city) {
-    document.getElementById('hero-title').textContent = `Help Find Lost Pets in ${loc.city}`;
-  }
+  // Run IP lookup in background — never blocks page load
+  getIPLocation().then(loc => {
+    if (loc && loc.city) {
+      document.getElementById('hero-title').textContent = `Help Find Lost Pets in ${loc.city}`;
+    }
+  });
 
   const params = new URLSearchParams(window.location.search);
   if (params.get('posted') === 'true') {
