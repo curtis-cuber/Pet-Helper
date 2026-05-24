@@ -348,6 +348,27 @@ footer {
   margin-top: 6px;
 }
 
+.badge-urgent {
+  display: inline-block;
+  background: #e53e3e;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 99px;
+  margin-top: 6px;
+}
+
+.pet-card.urgent {
+  border: 2px solid #e53e3e;
+}
+
+.pet-card-meta {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
 /* ── HOME HERO ── */
 .hero {
   text-align: center;

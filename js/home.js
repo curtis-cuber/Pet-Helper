@@ -1,12 +1,22 @@
+function daysAgo(dateStr) {
+  const diff = Math.floor((Date.now() - new Date(dateStr)) / 86400000);
+  if (diff === 0) return 'Today';
+  if (diff === 1) return '1 day ago';
+  return `${diff} days ago`;
+}
+
 function petCardHTML(post) {
   const found = post.is_found;
+  const urgent = post.urgency === 'Urgent';
   return `
-    <a href="post.html?id=${post.id}" class="pet-card ${found ? 'found' : ''}">
-      <img src="${post.photo_link}" alt="${post.pet_name}" onerror="this.src='https://placehold.co/400x300?text=No+Photo'" />
+    <a href="post.html?id=${post.id}" class="pet-card ${found ? 'found' : ''} ${urgent && !found ? 'urgent' : ''}">
+      <img src="${post.photo_link || ''}" alt="${post.pet_name}" onerror="this.src='https://placehold.co/400x300?text=No+Photo'" />
       <div class="pet-card-body">
         <div class="pet-card-name">${post.pet_name}</div>
         <div class="pet-card-type">${post.animal_type} &middot; ${post.color}</div>
+        <div class="pet-card-meta">${daysAgo(post.created_at)}</div>
         ${found ? '<span class="badge-found">Found!</span>' : ''}
+        ${urgent && !found ? '<span class="badge-urgent">Urgent</span>' : ''}
       </div>
     </a>`;
 }
