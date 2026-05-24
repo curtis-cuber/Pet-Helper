@@ -20,14 +20,8 @@ function getDraftData() {
   };
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-  // Pre-fill last seen location placeholder with city from IP
-  const loc = await getIPLocation();
-  if (loc && loc.city) {
-    const field = document.getElementById('last-seen');
-    if (!field.value) field.placeholder = `e.g. Corner of Main St, ${loc.city}`;
-  }
-
+document.addEventListener('DOMContentLoaded', () => {
+  // Attach listeners immediately — don't wait for IP lookup
   document.getElementById('preview-btn').addEventListener('click', () => {
     sessionStorage.setItem('poster-draft', JSON.stringify(getDraftData()));
     window.location.href = 'preview.html';
@@ -50,6 +44,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       btn.textContent = 'Post Alert';
     } else {
       window.location.href = `index.html?posted=true&postId=${data.id}`;
+    }
+  });
+
+  // Pre-fill location placeholder in the background after listeners are set
+  getIPLocation().then(loc => {
+    if (loc && loc.city) {
+      const field = document.getElementById('last-seen');
+      if (!field.value) field.placeholder = `e.g. Corner of Main St, ${loc.city}`;
     }
   });
 });
