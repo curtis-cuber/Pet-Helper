@@ -23,7 +23,6 @@ async function loadRecentPosts() {
     grid.innerHTML = '<div class="empty-state"><strong>No posts yet.</strong><p>Be the first to report a lost pet.</p></div>';
     return;
   }
-
   grid.innerHTML = posts.map(petCardHTML).join('');
 }
 
@@ -51,37 +50,20 @@ async function loadStats() {
   document.getElementById('stat-found').textContent = found ?? '—';
 }
 
-async function showWelcome() {
-  const user = await getCurrentUser();
-  if (!user) return;
-  const { data: profile } = await supabase.from('profiles').select('display_name').eq('user_id', user.id).single();
-  const name = profile?.display_name || user.email.split('@')[0];
-  document.getElementById('welcome-name').textContent = name;
-  document.getElementById('welcome-banner').style.display = 'block';
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
   loadRecentPosts();
   loadTrending();
   loadStats();
-  showWelcome();
 
-  // Update hero title with user's city from IP
   const loc = await getIPLocation();
   if (loc && loc.city) {
     document.getElementById('hero-title').textContent = `Help Find Lost Pets in ${loc.city}`;
   }
 
-  // If logged in, wire Report Lost Pet button to profile page (where posts are managed)
-  const reportBtn = document.getElementById('hero-report-btn');
-  const user = await getCurrentUser();
-  if (user && reportBtn) reportBtn.href = 'profile.html';
   const params = new URLSearchParams(window.location.search);
   if (params.get('posted') === 'true') {
     const postId = params.get('postId');
-    if (postId) {
-      document.getElementById('view-post-btn').href = `post.html?id=${postId}`;
-    }
+    if (postId) document.getElementById('view-post-btn').href = `post.html?id=${postId}`;
     document.getElementById('success-modal').style.display = 'flex';
     history.replaceState(null, '', 'index.html');
   }

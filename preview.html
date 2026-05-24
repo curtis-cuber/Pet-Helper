@@ -21,8 +21,6 @@
       <div class="nav-links">
         <a href="browse.html"><span>Browse Lost Pets</span></a>
         <button class="nav-icon-btn" onclick="toggleDarkMode()" title="Toggle dark mode"><span id="dark-mode-icon">☾</span></button>
-        <a href="login.html" id="nav-login" class="btn-nav"><span>Login</span></a>
-        <a href="#" id="nav-logout" class="btn-nav" style="display:none;"><span>Logout</span></a>
       </div>
     </nav>
 
@@ -48,7 +46,10 @@
             <div class="detail-item"><label>Contact</label><p id="prev-contact">—</p></div>
             <div class="detail-item" id="prev-reward-wrap" style="display:none;"><label>Reward</label><p id="prev-reward">—</p></div>
           </div>
-          <div style="margin-top:16px;"><label style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);">Description</label><p id="prev-desc" style="margin-top:4px;">—</p></div>
+          <div style="margin-top:16px;">
+            <label style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);">Description</label>
+            <p id="prev-desc" style="margin-top:4px;">—</p>
+          </div>
         </div>
 
         <div style="margin-top:20px;display:flex;gap:12px;">
@@ -64,7 +65,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/config.js"></script>
-    <script src="js/auth.js"></script>
     <script src="js/darkmode.js"></script>
     <script>
       function formatDate(d) {
@@ -72,7 +72,7 @@
         return new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
       }
 
-      document.addEventListener('DOMContentLoaded', async () => {
+      document.addEventListener('DOMContentLoaded', () => {
         const draft = JSON.parse(sessionStorage.getItem('poster-draft') || '{}');
         if (!draft.pet_name) { window.location.href = 'index.html'; return; }
 
@@ -90,13 +90,19 @@
         }
 
         document.getElementById('submit-from-preview').addEventListener('click', async () => {
-          const user = await getCurrentUser();
-          if (!user) { window.location.href = 'login.html'; return; }
           const btn = document.getElementById('submit-from-preview');
           btn.disabled = true; btn.textContent = 'Posting...';
-          const { error } = await supabase.from('posts').insert({ ...draft, user_id: user.id, owner_email: user.email, is_found: false });
-          if (error) { btn.disabled = false; btn.textContent = 'Post This Alert'; alert('Something went wrong. Please try again.'); }
-          else { sessionStorage.removeItem('poster-draft'); window.location.href = 'index.html?posted=true'; }
+          const { data, error } = await supabase
+            .from('posts')
+            .insert({ ...draft, is_found: false })
+            .select().single();
+          if (error) {
+            btn.disabled = false; btn.textContent = 'Post This Alert';
+            alert('Something went wrong. Please try again.');
+          } else {
+            sessionStorage.removeItem('poster-draft');
+            window.location.href = `index.html?posted=true&postId=${data.id}`;
+          }
         });
       });
     </script>
