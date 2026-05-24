@@ -1,12 +1,3 @@
-async function checkAuth() {
-  const user = await getCurrentUser();
-  if (!user) {
-    document.getElementById('auth-warning').style.display = 'block';
-    document.getElementById('poster-form').style.display = 'none';
-  }
-  return user;
-}
-
 function showMessage(text, type) {
   document.getElementById('form-message').innerHTML = `<div class="alert alert-${type}">${text}</div>`;
   window.scrollTo(0, 0);
@@ -18,7 +9,7 @@ function getDraftData() {
     animal_type: document.getElementById('animal-type').value,
     color: document.getElementById('color').value.trim(),
     date_missing: document.getElementById('date-missing').value,
-    photo_link: document.getElementById('photo-link').value.trim(),
+    photo_link: document.getElementById('photo-link').value.trim() || null,
     description: document.getElementById('description').value.trim(),
     last_seen_location: document.getElementById('last-seen').value.trim(),
     contact_info: document.getElementById('contact-info').value.trim(),
@@ -30,14 +21,11 @@ function getDraftData() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const user = await checkAuth();
-  if (!user) return;
-
-  // Pre-fill last seen location with city from IP address
+  // Pre-fill last seen location placeholder with city from IP
   const loc = await getIPLocation();
   if (loc && loc.city) {
-    const lastSeenField = document.getElementById('last-seen');
-    if (!lastSeenField.value) lastSeenField.placeholder = `e.g. Corner of Main St, ${loc.city}`;
+    const field = document.getElementById('last-seen');
+    if (!field.value) field.placeholder = `e.g. Corner of Main St, ${loc.city}`;
   }
 
   document.getElementById('preview-btn').addEventListener('click', () => {
@@ -51,9 +39,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     btn.disabled = true;
     btn.textContent = 'Posting...';
 
-    const { data, error } = await supabase.from('posts').insert({
-      ...getDraftData(), user_id: user.id, owner_email: user.email, is_found: false
-    }).select().single();
+    const { data, error } = await supabase
+      .from('posts')
+      .insert({ ...getDraftData(), is_found: false })
+      .select().single();
 
     if (error) {
       showMessage('Something went wrong. Please try again.', 'error');

@@ -147,6 +147,40 @@ nav {
   display: block;
 }
 
+/* ── REPORT CTA BANNER ── */
+.report-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  margin-bottom: 48px;
+}
+.report-cta h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0 0 4px;
+  color: #fff;
+}
+.report-cta p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+.report-cta .btn-primary {
+  background: #fff;
+  color: var(--primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.report-cta .btn-primary:hover {
+  background: #f5f5f5;
+}
+
 /* ── STATS COUNTER ── */
 .stats-bar {
   display: flex;

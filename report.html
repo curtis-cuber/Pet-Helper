@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Report a Lost Pet – Pet Helper</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+
+    <nav>
+      <a href="index.html" class="nav-logo">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="6" cy="7" rx="2" ry="3"/>
+          <ellipse cx="18" cy="7" rx="2" ry="3"/>
+          <ellipse cx="3" cy="14" rx="2" ry="2.5"/>
+          <ellipse cx="21" cy="14" rx="2" ry="2.5"/>
+          <path d="M12 10c-4 0-7 2.5-7 6 0 2.5 2 4 4 4 .8 0 2-.3 3-.3s2.2.3 3 .3c2 0 4-1.5 4-4 0-3.5-3-6-7-6z"/>
+        </svg>
+        Pet Helper
+      </a>
+      <div class="nav-links">
+        <a href="browse.html"><span>Browse Lost Pets</span></a>
+        <button class="nav-icon-btn" onclick="toggleDarkMode()" title="Toggle dark mode"><span id="dark-mode-icon">☾</span></button>
+      </div>
+    </nav>
+
+    <main>
+      <div class="form-wrapper">
+        <h1 class="section-title">Report a Lost Pet</h1>
+        <p class="section-sub">Fill in your pet's details. Your alert will be visible to everyone right away — no account needed.</p>
+
+        <div id="form-message"></div>
+
+        <form id="poster-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pet-name">Pet Name *</label>
+              <input type="text" id="pet-name" required placeholder="e.g. Buddy" />
+            </div>
+            <div class="form-group">
+              <label for="animal-type">Animal Type *</label>
+              <select id="animal-type" required>
+                <option value="">Select...</option>
+                <option value="Dog">Dog</option>
+                <option value="Cat">Cat</option>
+                <option value="Bird">Bird</option>
+                <option value="Rabbit">Rabbit</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="color">Pet Color *</label>
+              <input type="text" id="color" required placeholder="e.g. Brown and white" />
+            </div>
+            <div class="form-group">
+              <label for="date-missing">Date Missing *</label>
+              <input type="date" id="date-missing" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="photo-link">Photo Link</label>
+            <input type="url" id="photo-link" placeholder="Paste a link to a photo of your pet" />
+            <p class="form-hint">Upload your photo to Google Photos, then paste the link here.</p>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description *</label>
+            <textarea id="description" required placeholder="Describe your pet — size, markings, personality, collar color..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="last-seen">Last Seen Location *</label>
+            <input type="text" id="last-seen" required placeholder="e.g. Corner of Main St and Oak Ave" />
+          </div>
+
+          <div class="form-group">
+            <label for="contact-info">Contact Info *</label>
+            <input type="text" id="contact-info" required placeholder="e.g. Call 555-1234 or email you@email.com" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pet-age">Pet Age (optional)</label>
+              <input type="text" id="pet-age" placeholder="e.g. 3 years old" />
+            </div>
+            <div class="form-group">
+              <label for="pet-size">Pet Size (optional)</label>
+              <select id="pet-size">
+                <option value="">Select...</option>
+                <option value="Small">Small</option>
+                <option value="Medium">Medium</option>
+                <option value="Large">Large</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="urgency">Urgency Level *</label>
+            <select id="urgency" required>
+              <option value="Normal">Normal</option>
+              <option value="Urgent">Urgent — pet needs medication or is injured</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="reward">Reward (optional)</label>
+            <input type="text" id="reward" placeholder="e.g. $50 reward for safe return" />
+          </div>
+
+          <div style="display:flex;gap:12px;">
+            <button type="button" class="btn btn-outline" style="flex:1;" id="preview-btn">Preview Poster</button>
+            <button type="submit" class="btn btn-primary" style="flex:1;">Post Alert</button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Pet Helper. Helping reunite pets with their families.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/darkmode.js"></script>
+    <script src="js/location.js"></script>
+    <script src="js/report.js"></script>
+  </body>
+</html>

@@ -30,6 +30,7 @@ Paper flyers blow away and most neighbors never see them. This site gives lost p
 - Shows a **Pets Reported** and **Pets Reunited** counter.
 - Has three buttons: **Browse Lost Pets**, **Report Lost Pet**, **View on Map**.
 - The hero section greets the visitor with their city name (detected from their **IP address**) — e.g. "Help Find Lost Pets in Chicago."
+- Has a **"Report a Lost Pet"** call-to-action banner that makes it clear no account is needed — takes the visitor directly to the report form.
 - Has a features section explaining what the site can do.
 - Shows a **Trending This Week** section — the posts with the most views in the past 7 days.
 - Shows a preview of the most recently reported pets with a "See All Posts" link.
