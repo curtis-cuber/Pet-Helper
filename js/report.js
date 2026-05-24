@@ -33,13 +33,20 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.disabled = true;
     btn.textContent = 'Posting...';
 
+    if (typeof supabase === 'undefined') {
+      showMessage('Supabase is not configured. Check your environment variables and redeploy.', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Post Alert';
+      return;
+    }
+
     const { data, error } = await supabase
       .from('posts')
       .insert({ ...getDraftData(), is_found: false })
       .select().single();
 
     if (error) {
-      showMessage('Something went wrong. Please try again.', 'error');
+      showMessage('Error: ' + error.message, 'error');
       btn.disabled = false;
       btn.textContent = 'Post Alert';
     } else {
