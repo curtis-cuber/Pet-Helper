@@ -118,7 +118,7 @@ async function loadPost() {
   loadComments();
 
   const foundBtn = document.getElementById('found-btn');
-  if (foundBtn) foundBtn.addEventListener('click', () => reportFound(post.owner_email, post.pet_name));
+  if (foundBtn) foundBtn.addEventListener('click', () => reportFound(post.pet_name));
 
   const markFoundBtn = document.getElementById('mark-found-btn');
   if (markFoundBtn) markFoundBtn.addEventListener('click', markAsFound);
@@ -146,13 +146,13 @@ function copyLink() {
   });
 }
 
-async function reportFound(ownerEmail, petName) {
+async function reportFound(petName) {
   const { error } = await supabase.from('posts').update({ is_found: true }).eq('id', postId);
   if (error) {
     document.getElementById('action-message').innerHTML = '<div class="alert alert-error">Something went wrong. Please try again.</div>';
     return;
   }
-  window.location.href = `mailto:${ownerEmail}?subject=Your pet ${petName} has been found!&body=Someone on Pet Helper reported finding your pet. Please log in to see the details.`;
+  document.getElementById('action-message').innerHTML = `<div class="alert alert-success">Thank you! ${petName} has been marked as found.</div>`;
   setTimeout(() => window.location.reload(), 1500);
 }
 

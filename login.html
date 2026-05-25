@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In – Pet Helper</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+
+    <nav>
+      <a href="index.html" class="nav-logo">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="6" cy="7" rx="2" ry="3"/>
+          <ellipse cx="18" cy="7" rx="2" ry="3"/>
+          <ellipse cx="3" cy="14" rx="2" ry="2.5"/>
+          <ellipse cx="21" cy="14" rx="2" ry="2.5"/>
+          <path d="M12 10c-4 0-7 2.5-7 6 0 2.5 2 4 4 4 .8 0 2-.3 3-.3s2.2.3 3 .3c2 0 4-1.5 4-4 0-3.5-3-6-7-6z"/>
+        </svg>
+        Pet Helper
+      </a>
+      <div class="nav-links">
+        <a href="browse.html"><span>Browse Lost Pets</span></a>
+        <button class="nav-icon-btn" onclick="toggleDarkMode()" title="Toggle dark mode"><span id="dark-mode-icon">☾</span></button>
+      </div>
+    </nav>
+
+    <main>
+      <div class="form-wrapper">
+        <h1 class="section-title">Sign In</h1>
+        <p class="section-sub">Sign in to track your posts, message pet owners, and more. Posting a lost pet alert never requires an account.</p>
+
+        <div id="auth-message"></div>
+
+        <div class="view-toggle" style="margin-bottom:24px;">
+          <button class="toggle-btn active" id="tab-signin" onclick="showTab('signin')">Sign In</button>
+          <button class="toggle-btn" id="tab-signup" onclick="showTab('signup')">Create Account</button>
+        </div>
+
+        <form id="signin-form">
+          <div class="form-group">
+            <label for="signin-email">Email</label>
+            <input type="email" id="signin-email" required placeholder="you@email.com" />
+          </div>
+          <div class="form-group">
+            <label for="signin-password">Password</label>
+            <input type="password" id="signin-password" required placeholder="Your password" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Sign In</button>
+        </form>
+
+        <form id="signup-form" style="display:none;">
+          <div class="form-group">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" required placeholder="you@email.com" />
+          </div>
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" required placeholder="Choose a password (at least 6 characters)" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Create Account</button>
+        </form>
+
+        <p style="text-align:center;margin-top:20px;">
+          <a href="index.html" style="color:var(--text-muted);">Continue without signing in</a>
+        </p>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Pet Helper. Helping reunite pets with their families.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/darkmode.js"></script>
+    <script>
+      function showTab(tab) {
+        document.getElementById('signin-form').style.display = tab === 'signin' ? 'block' : 'none';
+        document.getElementById('signup-form').style.display = tab === 'signup' ? 'block' : 'none';
+        document.getElementById('tab-signin').classList.toggle('active', tab === 'signin');
+        document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+        document.getElementById('auth-message').innerHTML = '';
+      }
+
+      function showMessage(text, type) {
+        document.getElementById('auth-message').innerHTML = `<div class="alert alert-${type}">${text}</div>`;
+        window.scrollTo(0, 0);
+      }
+
+      document.getElementById('signin-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        btn.disabled = true; btn.textContent = 'Signing in...';
+        const email = document.getElementById('signin-email').value.trim();
+        const password = document.getElementById('signin-password').value;
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          showMessage(error.message, 'error');
+          btn.disabled = false; btn.textContent = 'Sign In';
+        } else {
+          window.location.href = 'profile.html';
+        }
+      });
+
+      document.getElementById('signup-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        btn.disabled = true; btn.textContent = 'Creating account...';
+        const email = document.getElementById('signup-email').value.trim();
+        const password = document.getElementById('signup-password').value;
+        const { error } = await supabase.auth.signUp({ email, password });
+        if (error) {
+          showMessage(error.message, 'error');
+          btn.disabled = false; btn.textContent = 'Create Account';
+        } else {
+          showMessage('Account created! Check your email to confirm, then sign in.', 'success');
+          btn.disabled = false; btn.textContent = 'Create Account';
+        }
+      });
+
+      // Redirect if already logged in
+      (async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) window.location.href = 'profile.html';
+      })();
+    </script>
+  </body>
+</html>

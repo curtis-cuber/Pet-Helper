@@ -5,7 +5,7 @@ function petCardHTML(post) {
   const found = post.is_found;
   return `
     <a href="post.html?id=${post.id}" class="pet-card ${found ? 'found' : ''}">
-      <img src="${post.photo_link}" alt="${post.pet_name}" onerror="this.src='https://placehold.co/400x300?text=No+Photo'" />
+      <img src="${post.photo_link || ''}" alt="${post.pet_name}" onerror="this.src='https://placehold.co/400x300?text=No+Photo'" />
       <div class="pet-card-body">
         <div class="pet-card-name">${post.pet_name}</div>
         <div class="pet-card-type">${post.animal_type} &middot; ${post.color}</div>
