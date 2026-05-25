@@ -6,7 +6,10 @@
       "PowerShell(Remove-Item \"c:\\\\Users\\\\Curti\\\\OneDrive\\\\AI Lab 1\\\\GitHub\\\\Pet Helper\\\\login.html\" -Confirm:$false -ErrorAction SilentlyContinue)",
       "PowerShell(Remove-Item \"c:\\\\Users\\\\Curti\\\\OneDrive\\\\AI Lab 1\\\\GitHub\\\\Pet Helper\\\\js\\\\auth.js\" -Confirm:$false -ErrorAction SilentlyContinue)",
       "PowerShell(Remove-Item \"c:\\\\Users\\\\Curti\\\\OneDrive\\\\AI Lab 1\\\\GitHub\\\\Pet Helper\\\\js\\\\notifications.js\" -Confirm:$false -ErrorAction SilentlyContinue)",
-      "PowerShell(Remove-Item \"c:\\\\Users\\\\Curti\\\\OneDrive\\\\AI Lab 1\\\\GitHub\\\\Pet Helper\\\\js\\\\make-poster.js\" -Confirm:$false -ErrorAction SilentlyContinue)"
+      "PowerShell(Remove-Item \"c:\\\\Users\\\\Curti\\\\OneDrive\\\\AI Lab 1\\\\GitHub\\\\Pet Helper\\\\js\\\\make-poster.js\" -Confirm:$false -ErrorAction SilentlyContinue)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
     ]
   }
 }
