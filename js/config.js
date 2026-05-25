@@ -1,5 +1,5 @@
 const SUPABASE_URL = 'https://orbimmdcdlusiepbcykn.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_IAi0o9AW-r_9tkz8NVxpGA_SSdFV7qX';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9yYmltbWRjZGx1c2llcGJjeWtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2NDYyNDQsImV4cCI6MjA5NTIyMjI0NH0.WI8HJyRc0GZYu6kUVEb5TQ-1C7UG_5Yrg55O3AMj_XI';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 
