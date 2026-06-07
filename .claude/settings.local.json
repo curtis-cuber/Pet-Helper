@@ -11,7 +11,10 @@
       "Bash(git commit *)",
       "Bash(git push *)",
       "Skill(update-config)",
-      "Skill(update-config:*)"
+      "Skill(update-config:*)",
+      "Bash(echo \"--- diff exit code: $? ---\")",
+      "Bash(curl -s \"https://pet-helper-gray.vercel.app/js/config.js\")",
+      "Bash(curl -s \"https://pet-helper-gray.vercel.app/report.html\")"
     ]
   }
 }

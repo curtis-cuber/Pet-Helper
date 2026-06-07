@@ -52,9 +52,6 @@ async function loadPost() {
   document.title = `${post.pet_name} – Pet Helper`;
   incrementViewCount();
 
-  const user = await getCurrentUser();
-  const isOwner = user && user.id === post.user_id;
-
   document.getElementById('post-content').innerHTML = `
     ${post.is_found ? '<div class="found-banner">This pet has been found and is home safe!</div>' : ''}
     <img class="post-detail-img" src="${post.photo_link}" alt="${post.pet_name}"
@@ -65,7 +62,6 @@ async function loadPost() {
         <p style="color:var(--text-muted);margin-top:4px;">Missing since ${daysAgo(post.date_missing)}</p>
       </div>
       <div style="display:flex;gap:8px;align-items:center;">
-        ${isOwner ? `<span style="font-size:0.85rem;color:var(--text-muted);">&#128065; ${post.view_count || 0} views</span>` : ''}
         <button class="btn btn-outline" style="padding:8px 14px;font-size:0.9rem;" onclick="copyLink()">&#128279; Copy Link</button>
       </div>
     </div>
@@ -83,20 +79,9 @@ async function loadPost() {
     <div id="map"></div>
     <div id="action-buttons" style="display:flex;gap:12px;flex-wrap:wrap;margin:20px 0;">
       ${!post.is_found ? `<button class="btn btn-green" id="found-btn">I Found This Pet</button>` : ''}
-      ${isOwner && !post.is_found ? `<button class="btn btn-outline" id="mark-found-btn">Mark as Found (I'm the owner)</button>` : ''}
-      ${!isOwner && user ? `<button class="btn btn-outline" id="msg-btn">&#9993; Message Owner</button>` : ''}
-      ${!isOwner ? `<button class="btn" style="background:#FEE2E2;color:#991B1B;border:1px solid #FECACA;" id="report-btn">&#9888; Report Post</button>` : ''}
+      <button class="btn" style="background:#FEE2E2;color:#991B1B;border:1px solid #FECACA;" id="report-btn">&#9888; Report Post</button>
     </div>
     <div id="action-message"></div>
-
-    <div id="message-panel" style="display:none;" class="message-panel">
-      <h3 style="margin-bottom:12px;">Private Message to Owner</h3>
-      <div id="message-thread" class="message-thread"></div>
-      <form id="message-form" style="display:flex;gap:8px;margin-top:12px;">
-        <input type="text" id="message-input" placeholder="Type a message..." style="flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);" />
-        <button type="submit" class="btn btn-primary" style="padding:10px 18px;">Send</button>
-      </form>
-    </div>
 
     <div class="comments-section">
       <h2 class="section-title" style="font-size:1.2rem;">Tips from Neighbors</h2>
@@ -120,19 +105,6 @@ async function loadPost() {
   const foundBtn = document.getElementById('found-btn');
   if (foundBtn) foundBtn.addEventListener('click', () => reportFound(post.pet_name));
 
-  const markFoundBtn = document.getElementById('mark-found-btn');
-  if (markFoundBtn) markFoundBtn.addEventListener('click', markAsFound);
-
-  const msgBtn = document.getElementById('msg-btn');
-  if (msgBtn) msgBtn.addEventListener('click', () => {
-    const panel = document.getElementById('message-panel');
-    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-    if (panel.style.display === 'block') loadMessages(post.user_id);
-  });
-
-  const messageForm = document.getElementById('message-form');
-  if (messageForm) messageForm.addEventListener('submit', (e) => sendMessage(e, post.user_id));
-
   const reportBtn = document.getElementById('report-btn');
   if (reportBtn) reportBtn.addEventListener('click', reportPost);
 
@@ -154,15 +126,6 @@ async function reportFound(petName) {
   }
   document.getElementById('action-message').innerHTML = `<div class="alert alert-success">Thank you! ${petName} has been marked as found.</div>`;
   setTimeout(() => window.location.reload(), 1500);
-}
-
-async function markAsFound() {
-  const { error } = await supabase.from('posts').update({ is_found: true }).eq('id', postId);
-  if (error) {
-    document.getElementById('action-message').innerHTML = '<div class="alert alert-error">Something went wrong.</div>';
-  } else {
-    window.location.reload();
-  }
 }
 
 async function reportPost() {
@@ -211,35 +174,6 @@ async function submitComment(e) {
   document.getElementById('commenter-name').value = '';
   document.getElementById('comment-text').value = '';
   loadComments();
-}
-
-async function loadMessages(ownerId) {
-  const user = await getCurrentUser();
-  if (!user) return;
-  const { data: msgs } = await supabase.from('messages')
-    .select('*')
-    .eq('post_id', postId)
-    .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
-    .order('created_at', { ascending: true });
-
-  const thread = document.getElementById('message-thread');
-  if (!msgs || msgs.length === 0) { thread.innerHTML = '<p style="color:var(--text-muted);font-size:0.9rem;">No messages yet.</p>'; return; }
-  thread.innerHTML = msgs.map(m => {
-    const mine = m.sender_id === user.id;
-    return `<div class="msg-bubble ${mine ? 'msg-mine' : 'msg-theirs'}">${m.message_text}</div>`;
-  }).join('');
-  thread.scrollTop = thread.scrollHeight;
-}
-
-async function sendMessage(e, ownerId) {
-  e.preventDefault();
-  const user = await getCurrentUser();
-  if (!user) { alert('Please log in to send messages.'); return; }
-  const text = document.getElementById('message-input').value.trim();
-  if (!text) return;
-  await supabase.from('messages').insert({ sender_id: user.id, receiver_id: ownerId, post_id: postId, message_text: text });
-  document.getElementById('message-input').value = '';
-  loadMessages(ownerId);
 }
 
 document.addEventListener('DOMContentLoaded', loadPost);
