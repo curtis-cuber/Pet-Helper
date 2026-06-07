@@ -37,12 +37,65 @@
 
       <!-- Hero -->
       <section class="hero">
-        <h1 id="hero-title">Help Find Lost Pets</h1>
-        <p>Post a missing pet alert that your whole neighborhood can see — no more flyers blowing away.</p>
-        <div class="hero-buttons">
-          <a href="browse.html" class="btn btn-primary">Browse Lost Pets</a>
-          <a href="report.html" class="btn btn-outline">Report Lost Pet</a>
-          <a href="browse.html?view=map" class="btn btn-outline">View on Map</a>
+        <div class="hero-text">
+          <h1 id="hero-title">Help Find Lost Pets</h1>
+          <p>Post a missing pet alert that your whole neighborhood can see — no more flyers blowing away.</p>
+          <div class="hero-buttons">
+            <a href="browse.html" class="btn btn-primary">Browse Lost Pets</a>
+            <a href="report.html" class="btn btn-outline">Report Lost Pet</a>
+            <a href="browse.html?view=map" class="btn btn-outline">View on Map</a>
+          </div>
+        </div>
+        <div class="hero-art">
+          <svg class="hero-illustration" viewBox="0 0 420 340" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="210" cy="180" r="170" fill="var(--primary)" opacity="0.08"/>
+
+            <!-- paw prints -->
+            <g transform="translate(350,55) rotate(25)" fill="var(--primary)" opacity="0.3">
+              <ellipse cx="0" cy="15" rx="11" ry="14"/>
+              <ellipse cx="-14" cy="-5" rx="6" ry="8"/>
+              <ellipse cx="-5" cy="-14" rx="6" ry="8"/>
+              <ellipse cx="6" cy="-14" rx="6" ry="8"/>
+              <ellipse cx="15" cy="-5" rx="6" ry="8"/>
+            </g>
+            <g transform="translate(55,295) rotate(-20) scale(0.65)" fill="var(--primary)" opacity="0.25">
+              <ellipse cx="0" cy="15" rx="11" ry="14"/>
+              <ellipse cx="-14" cy="-5" rx="6" ry="8"/>
+              <ellipse cx="-5" cy="-14" rx="6" ry="8"/>
+              <ellipse cx="6" cy="-14" rx="6" ry="8"/>
+              <ellipse cx="15" cy="-5" rx="6" ry="8"/>
+            </g>
+
+            <!-- cat, peeking from behind -->
+            <g>
+              <polygon points="228,140 218,93 258,126" fill="#B7BCC6"/>
+              <polygon points="322,140 332,93 292,126" fill="#B7BCC6"/>
+              <polygon points="231,133 226,107 248,124" fill="#F4B7C3"/>
+              <polygon points="319,133 324,107 302,124" fill="#F4B7C3"/>
+              <circle cx="275" cy="178" r="60" fill="#C7CBD3"/>
+              <ellipse cx="256" cy="180" rx="5" ry="8" fill="#3A2E27"/>
+              <ellipse cx="294" cy="180" rx="5" ry="8" fill="#3A2E27"/>
+              <polygon points="270,196 280,196 275,204" fill="#F4B7C3"/>
+              <path d="M275 204 q-22 6 -36 -2" stroke="#9AA0AB" stroke-width="1.5" fill="none"/>
+              <path d="M275 204 q22 6 36 -2" stroke="#9AA0AB" stroke-width="1.5" fill="none"/>
+            </g>
+
+            <!-- heart -->
+            <path transform="translate(210,108)" d="M0,12 C-6,2 -23,2 -23,-9 C-23,-23 -6,-23 0,-11 C6,-23 23,-23 23,-9 C23,2 6,2 0,12 Z" fill="var(--primary)"/>
+
+            <!-- dog, in front -->
+            <g>
+              <ellipse cx="112" cy="178" rx="27" ry="44" transform="rotate(-28 112 178)" fill="#C9925E"/>
+              <ellipse cx="232" cy="178" rx="27" ry="44" transform="rotate(28 232 178)" fill="#C9925E"/>
+              <circle cx="172" cy="212" r="82" fill="#E3A872"/>
+              <ellipse cx="172" cy="240" rx="48" ry="38" fill="#FBEFE0"/>
+              <circle cx="142" cy="198" r="8" fill="#3A2E27"/>
+              <circle cx="202" cy="198" r="8" fill="#3A2E27"/>
+              <ellipse cx="172" cy="228" rx="12" ry="9" fill="#3A2E27"/>
+              <path d="M172 237 q0 10 -12 14" stroke="#3A2E27" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <path d="M163 262 q9 14 0 26" fill="#F4B7C3"/>
+            </g>
+          </svg>
         </div>
       </section>
 

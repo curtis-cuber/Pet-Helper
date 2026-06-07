@@ -371,8 +371,29 @@ footer {
 
 /* ── HOME HERO ── */
 .hero {
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
   padding: 60px 20px 40px;
+}
+
+.hero-text {
+  text-align: center;
+  flex: 1 1 360px;
+}
+
+.hero-art {
+  flex: 1 1 280px;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-illustration {
+  width: 100%;
+  max-width: 340px;
+  height: auto;
 }
 
 .hero h1 {
@@ -899,6 +920,7 @@ footer {
 /* ── RESPONSIVE ── */
 @media (max-width: 600px) {
   .hero h1 { font-size: 1.8rem; }
+  .hero-illustration { max-width: 240px; }
   .form-row { grid-template-columns: 1fr; }
   .detail-grid { grid-template-columns: 1fr; }
   .nav-links a span { display: none; }
